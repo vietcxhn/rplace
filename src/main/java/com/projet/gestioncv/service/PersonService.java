@@ -3,6 +3,8 @@ package com.projet.gestioncv.service;
 import com.projet.gestioncv.model.Person;
 import com.projet.gestioncv.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,8 +37,10 @@ public class PersonService {
         personRepository.deleteById(username);
     }
 
-    public List<Person> searchPersons(String keyword) {
-        return personRepository.findByFirstNameContainingOrLastNameContaining(keyword, keyword);
+    public List<Person> searchPersons(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return personRepository.search(query, pageable);
     }
 }
 

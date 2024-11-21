@@ -3,6 +3,9 @@ package com.projet.gestioncv.service;
 import com.projet.gestioncv.model.Activity;
 import com.projet.gestioncv.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +40,11 @@ public class ActivityService {
 
     public List<Activity> searchActivitiesByTitle(String keyword) {
         return activityRepository.findByTitleContaining(keyword);
+    }
+
+    public Page<Activity> getActivitiesByCvId(Long cvId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return activityRepository.findByCvId(cvId, pageable);
     }
 }
 

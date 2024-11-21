@@ -3,6 +3,7 @@ package com.projet.gestioncv.security;
 import com.projet.gestioncv.model.CV;
 import com.projet.gestioncv.model.Person;
 import com.projet.gestioncv.repository.PersonRepository;
+import com.projet.gestioncv.service.PopulateService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.DispatcherType;
 import org.apache.commons.logging.Log;
@@ -48,7 +49,7 @@ public class JwtWebSecurityConfig {
 	public void init() {
 		var encoder = passwordEncoder();
 		var aa = new Person(
-				"admin",
+				"aaa",
 				"admin",
 				"admin",
 				"admin",
@@ -79,9 +80,8 @@ public class JwtWebSecurityConfig {
 		http.authorizeHttpRequests(config -> {//
 			config.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
 			// Pour tous
-			config.requestMatchers("/secu-users/login").permitAll();//
-			config.requestMatchers("/secu-users/signup").permitAll();//
-			config.requestMatchers("/secu-users/**").authenticated();//
+			config.requestMatchers("/login").permitAll();//
+			config.requestMatchers("/signup").permitAll();//
 			config.requestMatchers("/api/**").authenticated();//
 			// Pour les autres
 			config.anyRequest().permitAll();
