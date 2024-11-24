@@ -2,7 +2,9 @@ package com.projet.gestioncv.service;
 
 import com.projet.gestioncv.model.Person;
 import com.projet.gestioncv.repository.PersonRepository;
+import com.projet.gestioncv.security.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,10 @@ public class PersonService {
     private PersonRepository personRepository;
 
     public Person createPerson(Person person) {
+        if (personRepository.existsById(person.getUsername())) {
+            throw new JwtException("Username is already in use");
+        }
+
         return personRepository.save(person);
     }
 
@@ -29,7 +35,11 @@ public class PersonService {
     }
 
     public Person updatePerson(String username, Person updatedPerson) {
+        Person person = personRepository.findById(username).get();
         updatedPerson.setUsername(username);
+        updatedPerson.setPassword(person.getPassword());
+        updatedPerson.setRoles(person.getRoles());
+        updatedPerson.setActivities(person.getActivities());
         return personRepository.save(updatedPerson);
     }
 
@@ -37,7 +47,7 @@ public class PersonService {
         personRepository.deleteById(username);
     }
 
-    public List<Person> searchPersons(String query, int page, int size) {
+    public Page<Person> searchPersons(String query, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
         return personRepository.search(query, pageable);

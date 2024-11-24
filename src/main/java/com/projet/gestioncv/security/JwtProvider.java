@@ -2,6 +2,7 @@ package com.projet.gestioncv.security;
 
 import com.projet.gestioncv.model.Person;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -111,7 +112,7 @@ public class JwtProvider {
 
 			Date expiration = claims.getExpiration();  // Extract the expiration date
 			return expiration.before(new Date());      // Check if token has expired
-		} catch (SignatureException | IllegalArgumentException e) {
+		} catch (SignatureException | IllegalArgumentException | ExpiredJwtException e) {
 			// Handle invalid or corrupted tokens
 			return true; // If there's an error parsing the token, consider it expired
 		}

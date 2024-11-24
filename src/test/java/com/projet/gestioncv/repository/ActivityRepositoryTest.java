@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.projet.gestioncv.model.Activity;
 import com.projet.gestioncv.model.ActivityNature;
-import com.projet.gestioncv.model.CV;
 import com.projet.gestioncv.model.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +29,16 @@ public class ActivityRepositoryTest {
         person.setFirstName("firstname1");
         person.setEmail("person1@gmail.com");
         person.setPassword("password");
-
-        CV cv = new CV();
-        cv.setPerson(person);
-        person.setCv(cv);
         personRepository.save(person);
 
         Activity activity = new Activity();
         activity.setActivityYear(2023);
         activity.setNature(ActivityNature.PROFESSIONAL_EXPERIENCE);
         activity.setTitle("Developer");
-        activity.setCv(cv);
+        activity.setPerson(person);
         activityRepository.save(activity);
 
-        List<Activity> activities = activityRepository.findByCvId(cv.getId());
+        List<Activity> activities = activityRepository.findByPersonUsername(person.getUsername());
         assertFalse(activities.isEmpty());
         assertEquals("Developer", activities.getFirst().getTitle());
     }
@@ -57,16 +52,13 @@ public class ActivityRepositoryTest {
         person.setEmail("person2@gmail.com");
         person.setPassword("password");
 
-        CV cv = new CV();
-        cv.setPerson(person);
-        person.setCv(cv);
         personRepository.save(person);
 
         Activity activity = new Activity();
         activity.setActivityYear(2022);
         activity.setNature(ActivityNature.EDUCATION);
         activity.setTitle("formation");
-        activity.setCv(cv);
+        activity.setPerson(person);
         activityRepository.save(activity);
 
         activity.setTitle("formation spring boot");
@@ -85,17 +77,13 @@ public class ActivityRepositoryTest {
         person.setFirstName("firstname3");
         person.setEmail("person3@gmail.com");
         person.setPassword("password");
-
-        CV cv = new CV();
-        cv.setPerson(person);
-        person.setCv(cv);
         personRepository.save(person);
 
         Activity activity = new Activity();
         activity.setActivityYear(2021);
         activity.setNature(ActivityNature.PROJECT);
         activity.setTitle("project");
-        activity.setCv(cv);
+        activity.setPerson(person);
         activityRepository.save(activity);
 
         activityRepository.delete(activity);

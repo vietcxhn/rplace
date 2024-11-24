@@ -6,9 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
-    List<Activity> findByCvId(long cvId);
-    Page<Activity> findByCvId(Long cvId, Pageable pageable);
-    List<Activity> findByTitleContaining(String title);
+    List<Activity> findByPersonUsername(String username);
+    Page<Activity> findByPersonUsernameOrderByActivityYearAsc(String username, Pageable pageable);
+    Optional<Activity> findByTitleContaining(String title);
 }

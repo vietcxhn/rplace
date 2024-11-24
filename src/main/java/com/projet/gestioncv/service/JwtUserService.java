@@ -11,8 +11,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Profile("usejwt")
@@ -40,28 +43,23 @@ public class JwtUserService {
 		}
 	}
 
-	public String signup(Person user) {
-		if (personRepository.existsById(user.getUsername())) {
+	public String signup(Person person) {
+		if (personRepository.existsById(person.getUsername())) {
 			throw new JwtException("Username is already in use");
 		}
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		personRepository.save(user);
-		return jwtTokenProvider.createToken(user);
-	}
 
-	public void delete(String username) {
-		personRepository.deleteById(username);
-	}
-
-	public Optional<Person> search(String username) {
-		return personRepository.findById(username);
+		personRepository.save(person);
+		return jwtTokenProvider.createToken(person);
 	}
 
 	public String refresh(String username) {
-		return jwtTokenProvider.createToken(personRepository.findById(username).get());
+		return null;
 	}
 
 	public void removeToken(String token) {
 		jwtTokenProvider.removeToken(token);
+	}
+
+	public void logout() {
 	}
 }

@@ -1,9 +1,7 @@
 package com.projet.gestioncv.security;
 
-import com.projet.gestioncv.model.CV;
 import com.projet.gestioncv.model.Person;
 import com.projet.gestioncv.repository.PersonRepository;
-import com.projet.gestioncv.service.PopulateService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.DispatcherType;
 import org.apache.commons.logging.Log;
@@ -15,6 +13,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,6 +35,7 @@ import java.util.Set;
 @EnableWebSecurity
 @Profile("usejwt")
 @EnableScheduling
+@EnableMethodSecurity
 public class JwtWebSecurityConfig {
 
 	@Autowired
@@ -49,17 +50,29 @@ public class JwtWebSecurityConfig {
 	public void init() {
 		var encoder = passwordEncoder();
 		var aa = new Person(
-				"aaa",
 				"admin",
 				"admin",
 				"admin",
-				"admin",
+				"admin@admin",
+				"",
 				new Date(),
-				encoder.encode("aaa"),
-				new CV(),
+				encoder.encode("admin"),
+				new ArrayList<>(),
 				Set.of("ADMIN", "USER")
 		);
+		var viet = new Person(
+				"viet",
+				"cong",
+				"viet",
+				"admin@admin",
+				"",
+				new Date(),
+				encoder.encode("admin"),
+				new ArrayList<>(),
+				Set.of("USER")
+		);
 		repo.save(aa);
+		repo.save(viet);
 		logger.debug("--- INIT SPRING SECURITY JWT");
 	}
 
@@ -79,17 +92,8 @@ public class JwtWebSecurityConfig {
 		// Déclaration des end-points
 		http.authorizeHttpRequests(config -> {//
 			config.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
-			// Pour tous
-			config.requestMatchers("/login").permitAll();//
-			config.requestMatchers("/signup").permitAll();//
-			config.requestMatchers("/api/**").authenticated();//
 			// Pour les autres
 			config.anyRequest().permitAll();
-		});
-
-		// Pas vraiment nécessaire
-		http.exceptionHandling(config -> {
-			config.accessDeniedPage("/secu-users/login");
 		});
 
 		// Mise en place du filtre JWT
