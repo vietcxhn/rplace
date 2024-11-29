@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,14 +30,16 @@ public class ActivityRepositoryTest {
         person.setFirstName("firstname1");
         person.setEmail("person1@gmail.com");
         person.setPassword("password");
+        person.setBirthDate(new Date());
         personRepository.save(person);
 
         Activity activity = new Activity();
         activity.setActivityYear(2023);
         activity.setNature(ActivityNature.PROFESSIONAL_EXPERIENCE);
         activity.setTitle("Developer");
-        activity.setPerson(person);
+        person.addActivity(activity);
         activityRepository.save(activity);
+        personRepository.save(person);
 
         List<Activity> activities = activityRepository.findByPersonUsername(person.getUsername());
         assertFalse(activities.isEmpty());
@@ -51,6 +54,7 @@ public class ActivityRepositoryTest {
         person.setFirstName("firstname2");
         person.setEmail("person2@gmail.com");
         person.setPassword("password");
+        person.setBirthDate(new Date());
 
         personRepository.save(person);
 
@@ -77,6 +81,7 @@ public class ActivityRepositoryTest {
         person.setFirstName("firstname3");
         person.setEmail("person3@gmail.com");
         person.setPassword("password");
+        person.setBirthDate(new Date());
         personRepository.save(person);
 
         Activity activity = new Activity();

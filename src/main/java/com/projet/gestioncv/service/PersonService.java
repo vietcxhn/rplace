@@ -34,12 +34,7 @@ public class PersonService {
         return personRepository.findAll();
     }
 
-    public Person updatePerson(String username, Person updatedPerson) {
-        Person person = personRepository.findById(username).get();
-        updatedPerson.setUsername(username);
-        updatedPerson.setPassword(person.getPassword());
-        updatedPerson.setRoles(person.getRoles());
-        updatedPerson.setActivities(person.getActivities());
+    public Person updatePerson(Person updatedPerson) {
         return personRepository.save(updatedPerson);
     }
 

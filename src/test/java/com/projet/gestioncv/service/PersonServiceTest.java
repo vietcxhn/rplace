@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,6 +29,9 @@ public class PersonServiceTest {
         person.setUsername("username");
         person.setFirstName("firstName");
         person.setLastName("lastName");
+        person.setBirthDate(new Date());
+        person.setEmail("person@email");
+        person.setPassword("password");
 
         Person created = personService.createPerson(person);
         assertEquals("username", created.getUsername());
@@ -44,10 +48,10 @@ public class PersonServiceTest {
     @Test
     @Order(3)
     public void testUpdatePerson() {
-        Person updatedPerson = new Person();
+        Person updatedPerson = personService.getPerson("username").get();
         updatedPerson.setLastName("new lastName");
 
-        Person result = personService.updatePerson("username", updatedPerson);
+        Person result = personService.updatePerson(updatedPerson);
 
         assertEquals("new lastName", result.getLastName());
     }

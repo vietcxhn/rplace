@@ -57,12 +57,13 @@ public class PersonController {
     public ResponseEntity<Map<String, String>> updatePerson(@PathVariable String username, @RequestBody PersonDTO updatedPerson) {
         Person update = map(updatedPerson);
         Person old = personService.getPerson(username).get();
+        update.setUsername(username);
         update.setActivities(old.getActivities());
         update.setRoles(old.getRoles());
         update.setPassword(old.getPassword());
         Map<String, String> errorMap = checkError(update);
         if(errorMap.isEmpty())
-            personService.updatePerson(username, update);
+            personService.updatePerson(update);
         return ResponseEntity.ok(errorMap);
     }
 

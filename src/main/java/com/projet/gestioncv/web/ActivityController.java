@@ -23,13 +23,6 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
     private final ModelMapper modelMapper = new ModelMapper();
-    private Activity map(ActivityDTO dto) {
-        return modelMapper.map(dto,  Activity.class);
-    }
-
-    private ActivityDTO map(Activity dto) {
-        return modelMapper.map(dto,  ActivityDTO.class);
-    }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and principal.username == #personId)")
@@ -98,5 +91,13 @@ public class ActivityController {
             }
         }
         return errorMap;
+    }
+
+    private Activity map(ActivityDTO dto) {
+        return modelMapper.map(dto,  Activity.class);
+    }
+
+    private ActivityDTO map(Activity dto) {
+        return modelMapper.map(dto,  ActivityDTO.class);
     }
 }
