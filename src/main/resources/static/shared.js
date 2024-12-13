@@ -4,36 +4,19 @@ let a = axios.create({
 });
 a.interceptors.response.use(
     (response) => {
-        // If the request is successful, just return the response
         return response;
     },
     (error) => {
         console.log(error)
         if (error.status === 403 || error.status === 401) {
             sessionStorage.removeItem("jwtToken");
-            window.location.hash = "#/";
+            window.location.hash = "#/login";
         }
-
     }
 );
 
 const shared = Vue.reactive({
     axios: a,
-    activityNatures: [
-        {
-            key: "Experience professionnelle",
-            value: "PROFESSIONAL_EXPERIENCE"
-        },{
-            key: "Education",
-            value: "EDUCATION"
-        },{
-            key: "Projet",
-            value: "PROJECT"
-        },{
-            key: "Autre",
-            value: "OTHER"
-        }
-    ],
     me: null,
 });
 
@@ -41,6 +24,7 @@ export default {
     getMe() {
         return shared.axios.get('http://localhost:8080/auth/me', {
             headers: {
+                'Accept': 'application/json',
                 'Authorization': "Bearer " + sessionStorage.getItem("jwtToken")
             }
         })

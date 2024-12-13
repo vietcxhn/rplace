@@ -16,11 +16,13 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
-	<title>Spring boot application</title>
+	<title>r/place Revival</title>
 	<link rel="stylesheet" href="${bootstrap_css}">
 	<link rel="stylesheet" href="${css}">
 	<script src="${bootstrap_js}"></script>
 	<script src="${vue_js}"></script>
 	<script src="${axios_js}"></script>
+	<script src="/webjars/sockjs-client/1.5.1/sockjs.min.js"></script>
+	<script src="/webjars/stomp-websocket/2.3.4/stomp.min.js"></script>
 </head>
 <body>
